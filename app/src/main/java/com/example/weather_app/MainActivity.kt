@@ -91,6 +91,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getLocationWeatherDetails(){
+        if(Constants.isNetworkAvailable(this)){
+            Toast.makeText(this@MainActivity, "You've connected to the internet", Toast.LENGTH_SHORT).show()
+        }else{
+            Toast.makeText(this@MainActivity, "No internet connection", Toast.LENGTH_SHORT).show()
+
+        }
+    }
+
     private val _locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult){
             val _lastLocation: Location = locationResult.lastLocation
@@ -100,6 +109,8 @@ class MainActivity : AppCompatActivity() {
 
             val _longitude = _lastLocation.longitude
             Log.i("current longitude", "$_longitude")
+
+            getLocationWeatherDetails()
         }
     }
 
