@@ -13,8 +13,10 @@ import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.example.weather_app.databinding.ActivityMainBinding
 import com.example.weather_app.network.WeatherService
 import com.google.android.gms.location.*
 import com.karumi.dexter.Dexter
@@ -25,14 +27,16 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.weatherapp.models.WeatherResponse
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
-
 class MainActivity : AppCompatActivity() {
     private lateinit var _fusedLocationClient:  FusedLocationProviderClient
     private var _progressDialog: Dialog? = null
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         _fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         if(!isLocatinEnabled()){
@@ -121,6 +125,11 @@ class MainActivity : AppCompatActivity() {
                         hideProgressDialog()
 
                         val weatherList: WeatherResponse? =  response.body()
+
+                        if (weatherList != null) {
+                            setUpUI(weatherList)
+                        }
+
                         Log.i("Response", "$weatherList")
                     }else{
                         val responseCode = response.code()
@@ -180,5 +189,12 @@ class MainActivity : AppCompatActivity() {
     private fun hideProgressDialog(){
         if(_progressDialog != null)
             _progressDialog!!.dismiss()
+    }
+
+    private fun setUpUI(weatherList: WeatherResponse){
+        for(i in weatherList.weather.indices){
+            Log.i("Weather name", weatherList.weather.toString())
+             binding.tvMain.text= weatherList.weather[i].main
+        }
     }
 }
