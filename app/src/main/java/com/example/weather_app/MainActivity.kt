@@ -162,6 +162,9 @@ class MainActivity : AppCompatActivity() {
         override fun onLocationResult(locationResult: LocationResult){
             val _lastLocation: Location = locationResult.lastLocation
 
+            /* AŞKALE
+            * lat 39.9214
+            * lon 40.6922 */
             val _latitude = _lastLocation.latitude
             Log.i("current latitude", "$_latitude")
 
@@ -195,6 +198,19 @@ class MainActivity : AppCompatActivity() {
         for(i in weatherList.weather.indices){
             Log.i("Weather name", weatherList.weather.toString())
              binding.tvMain.text= weatherList.weather[i].main
+
+            binding.tvMain.text = weatherList.weather[i].main
+            binding.tvMainDescription.text = weatherList.weather[i].description
+            // Santigrat veya ,Fahrenayt diplerini getUnit() fonk içerisinde tanımlandırılacak
+            binding.tvTemp.text = weatherList.main.temp.toString() + getUnit(application.resources.configuration.locales.toString())
         }
+    }
+
+    private fun getUnit(value: String): String?{
+        var value = "°C"
+        if("US" == value)
+            value = "°F"
+
+        return value
     }
 }
