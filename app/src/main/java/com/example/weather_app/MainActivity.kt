@@ -27,6 +27,9 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.weatherapp.models.WeatherResponse
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
+import java.util.*
+
 class MainActivity : AppCompatActivity() {
     private lateinit var _fusedLocationClient:  FusedLocationProviderClient
     private var _progressDialog: Dialog? = null
@@ -86,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                 }catch (e: ActivityNotFoundException){
                     e.printStackTrace()
                 }
-            }.setNegativeButton("Cancel"){dialog, _,-> dialog.dismiss()}.show()
+            }.setNegativeButton("Cancel"){ dialog, _ -> dialog.dismiss()}.show()
     }
 
     @SuppressLint("MissingPermission")
@@ -203,6 +206,16 @@ class MainActivity : AppCompatActivity() {
             binding.tvMainDescription.text = weatherList.weather[i].description
             // Santigrat veya ,Fahrenayt diplerini getUnit() fonk içerisinde tanımlandırılacak
             binding.tvTemp.text = weatherList.main.temp.toString() + getUnit(application.resources.configuration.locales.toString())
+
+            binding.tvSunriseTime.text = unixTime(weatherList.sys.sunrise)
+            binding.tvSunsetTime.text = unixTime(weatherList.sys.sunset)
+
+            binding.tvHumidity.text = weatherList.main.humidity.toString() + " per cent"
+            binding.tvMin.text = weatherList.main.temp_min.toString() + " min"
+            binding.tvMax.text = weatherList.main.temp_max.toString() + " max"
+            binding.tvSpeed.text = weatherList.wind.speed.toString()
+            binding.tvName.text = weatherList.name
+            binding.tvCountry.text = weatherList.sys.country
         }
     }
 
@@ -212,5 +225,14 @@ class MainActivity : AppCompatActivity() {
             value = "°F"
 
         return value
+    }
+
+    private fun unixTime(time: Long): String?{
+        val date = Date(time*1000L)
+        val trlocale = Locale("tr", "TR")
+        val sdf = SimpleDateFormat("HH:mm", trlocale)
+        sdf.timeZone = TimeZone.getDefault()
+
+        return sdf.format(date)
     }
 }
