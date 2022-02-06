@@ -13,6 +13,8 @@ import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -251,5 +253,21 @@ class MainActivity : AppCompatActivity() {
         sdf.timeZone = TimeZone.getDefault()
 
         return sdf.format(date)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // birden fazla menu item olduğunu varsayarsak
+        return when(item.itemId){
+            R.id.action_refresh -> {
+                // konumu güncelle
+                requestLocationData()
+                true
+            }else -> super.onOptionsItemSelected(item)
+        }
     }
 }
