@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    //TODO: test ezgi
     private lateinit var _fusedLocationClient:  FusedLocationProviderClient
     private var _progressDialog: Dialog? = null
 
